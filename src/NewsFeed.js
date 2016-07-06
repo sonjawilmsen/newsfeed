@@ -2,6 +2,9 @@ import React from 'react';
 import $ from 'jquery';
 import NewsItem from './NewsItem';
 
+import { containerStyle } from './styles/containers';
+import { row } from './styles/grid';
+
 class NewsFeed extends React.Component {
   constructor() {
     super();
@@ -58,10 +61,10 @@ class NewsFeed extends React.Component {
     let newsItems = this.state.newsItems;
 
     return (
-      <div>
+      <div style={containerStyle}>
         <h1>{title}</h1>
 
-        <div>
+        <div style={row}>
           {newsItems.map(this.renderNewsItem.bind(this))}
         </div>
       </div>
