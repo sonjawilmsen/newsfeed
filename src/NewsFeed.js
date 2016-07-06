@@ -1,9 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 import NewsItem from './NewsItem';
-
-import { containerStyle } from './styles/containers';
-import { row } from './styles/grid';
+import FancyTitle from './styles/FancyTitle';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 class NewsFeed extends React.Component {
   constructor() {
@@ -11,12 +10,14 @@ class NewsFeed extends React.Component {
 
     this.state = {
       title: "Loading...",
-      newsItems: []
+      newsItems: [],
+      loading: true
     };
   }
 
   componentDidMount() {
-    this.loadNews();
+    window.setTimeout(this.loadNews.bind(this), 1000);
+    // this.loadNews();
   }
 
   loadNews() {
@@ -33,15 +34,14 @@ class NewsFeed extends React.Component {
        success: function(xml){
          component.setState({
            title: xml.responseData.feed.title,
-           newsItems: xml.responseData.feed.entries
+           newsItems: xml.responseData.feed.entries,
+           loading: false
          });
        }
      });
   }
 
   renderNewsItem(item, index) {
-    console.log(item);
-
     // Get the image from the HTML content snippet
     var content = $("<div/>").html(item.content);
     var image = $("img", content).attr("src");
@@ -49,26 +49,44 @@ class NewsFeed extends React.Component {
     return (
       <NewsItem
         key={index}
-        title={item.title}
+        item={item}
         image={image}
-        description={item.contentSnippet}
         link={item.link} />
     );
   }
 
-  render() {
+  renderList() {
     let title = this.state.title;
     let newsItems = this.state.newsItems;
 
     return (
-      <div style={containerStyle}>
-        <h1>{title}</h1>
+      <div>
+        <FancyTitle label={title} />
 
-        <div style={row}>
+        <div>
           {newsItems.map(this.renderNewsItem.bind(this))}
         </div>
       </div>
     );
+  }
+
+  renderLoading() {
+    return(
+      <RefreshIndicator
+        top={100}
+        left={window.innerWidth / 2 - 50}
+        size={100}
+        loadingColor={"#FF9800"}
+        status="loading" />
+    );
+  }
+
+  render() {
+    if (this.state.loading) {
+      return this.renderLoading();
+    }
+
+    return this.renderList();
   }
 }
 
