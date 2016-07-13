@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import _ from 'lodash';
 import NewsItem from './NewsItem';
 import FancyTitle from './styles/FancyTitle';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
@@ -58,6 +59,12 @@ class NewsFeed extends React.Component {
   renderList() {
     let title = this.state.title;
     let newsItems = this.state.newsItems;
+    let category = this.props.category;
+
+    if(category){
+      newsItems = _.filter(newsItems, function(item){return _.includes(item.categories, category); });
+
+    }
 
     return (
       <div>

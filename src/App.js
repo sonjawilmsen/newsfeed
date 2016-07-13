@@ -13,7 +13,7 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        <NewsFeed url={feedUrl} />
+        <NewsFeed url={feedUrl} category={this.props.params.category} />
       </MuiThemeProvider>
     );
   }
